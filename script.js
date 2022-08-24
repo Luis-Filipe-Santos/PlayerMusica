@@ -1,20 +1,21 @@
 let musicas = [
-    {titulo:'Grande é o Senhor', artista:'Adhemar de Campos', src:'./musicas/ADHEMAR DE CAMPOS _ ATO 3 _ 04 _ Grande Ã© o Senhor  _ _IgrejaNaRua(MP3_320K).mp3', img:'./imagens/GrandeÉOSenhor.png'}    
-    {titulo:'Eu quero é Deus', artista:'Morada', src:'./musicas/EU QUERO É DEUS _ CELEBRAI A CRISTO _ AQUELE QUE ESTÃ FELIZ _ MORADA (CLIPE OFICIAL)(MP3_320K).mp3', img:'./imagens/EuQueroDeus.png'}    
-    {titulo:'Todavia me Alegrarei', artista:'Leandro Soares', src:'./musicas/LEANDRO SOARES - TODAVIA ME ALEGRAREI (CLIPE OFICIAL)(MP3_320K).mp3', img:'./imagens/TodaviaMeAlegrarei.png'}    
-    {titulo:'Daniel', artista:'Thalles Roberto', src:'./musicas/Thalles Roberto - Daniel ft. Fernandinho(MP3_320K).mp3', img:'./imagens/Daniel.png'}    
-    {titulo:'Ele vem', artista:'Thalles Roberto', src:'./musicas/Thalles Roberto - Ele Vem (Ao Vivo na Bola de Neve BH) (Clipe Oficial)(MP3_320K).mp3', img:'./imagens/EleVem.png'}    
+    {titulo:'Grande é o Senhor', artista:'Adhemar de Campos', src:'./musicas/ADHEMAR DE CAMPOS _ ATO 3 _ 04 _ Grande Ã© o Senhor  _ _IgrejaNaRua(MP3_320K).mp3', img:'./imagens/GrandeÉOSenhor.png'},    
+    {titulo:'Eu quero é Deus', artista:'Morada', src:'./musicas/EU QUERO É DEUS _ CELEBRAI A CRISTO _ AQUELE QUE ESTÃ FELIZ _ MORADA (CLIPE OFICIAL)(MP3_320K).mp3', img:'./imagens/EuQueroDeus.png'},   
+    {titulo:'Todavia me Alegrarei', artista:'Leandro Soares', src:'./musicas/LEANDRO SOARES - TODAVIA ME ALEGRAREI (CLIPE OFICIAL)(MP3_320K).mp3', img:'./imagens/TodaviaMeAlegrarei.png'},    
+    {titulo:'Daniel', artista:'Thalles Roberto', src:'./musicas/Thalles Roberto - Daniel ft. Fernandinho(MP3_320K).mp3', img:'./imagens/Daniel.png'},    
+    {titulo:'Ele vem', artista:'Thalles Roberto', src:'./musicas/Thalles Roberto - Ele Vem (Ao Vivo na Bola de Neve BH) (Clipe Oficial)(MP3_320K).mp3', img:'./imagens/EleVem.png'},    
     {titulo:'Vem me buscar', artista:'Jefferson & Suellen', src:'./musicas/VEM ME BUSCAR - JEFFERSON _ SUELLEN (LIVE SESSION - AO VIVO)(MP3_320K).mp3', img:'./imagens/VemBuscar.png'}    
 ];
 
 let musica = document.querySelector('audio');
+let indexMusica = 0;
 
 let duracaoMusica = document.querySelector('.fim');
 let imagem = document.querySelector('img');
 let nomeMusica = document.querySelector('.descricao h2');
 let nomeArtista = document.querySelector('.descricao i');
 
-duracaoMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
+renderizarMusica(indexMusica);
 
 // Evento
 
@@ -25,15 +26,33 @@ document.querySelector('.botao-pause').addEventListener('click', pararMusica);
 musica.addEventListener('timeupdate', atualizarBarra);
 
 document.querySelector('.anterior').addEventListener('click', () => {
-    
+    indexMusica--;
+    if(indexMusica < 0) {
+        indexMusica = 6;
+    }
+    renderizarMusica(indexMusica);
 });
 
-document.querySelector('.proxima').addEventListener('click', () => {
-
+document.querySelector('.proximo').addEventListener('click', () => {
+    indexMusica++;
+    if(indexMusica > 6){
+        indexMusica = 0;
+    }
+    renderizarMusica(indexMusica);
 });
 
 
 // Funções
+function renderizarMusica(index){
+    musica.setAttribute('src', musicas[index].src);
+    musica.addEventListener('loadeddata', () => {
+        nomeMusica.textContent = musicas[index].titulo;
+        nomeArtista.textContent = musicas[index].artista;
+        imagem.src = musicas[index].img;
+        duracaoMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
+    });
+
+}
 
 function tocarMusica(){
     musica.play();
@@ -63,3 +82,5 @@ function segundosParaMinutos(segundos){
 
     return campoMinutos + ':' + campoSeguntos;
 }
+
+
